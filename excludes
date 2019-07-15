@@ -1,4 +1,6 @@
 # This file contains the output files that need %exclude. Full path
 # names, one per line.
+/usr/lib64/libiptc.so.0
 /usr/lib64/libiptc.so.0.0.0
+/usr/lib64/libxtables.so.12
 /usr/lib64/libxtables.so.12.2.0
