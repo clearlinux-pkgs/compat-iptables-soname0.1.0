@@ -6,7 +6,7 @@
 #
 Name     : compat-iptables-soname0.1.0
 Version  : 1.8.2
-Release  : 2
+Release  : 3
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source1 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2.sig
@@ -97,7 +97,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1563213493
+export SOURCE_DATE_EPOCH=1563214572
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -110,7 +110,7 @@ export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-stron
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1563213493
+export SOURCE_DATE_EPOCH=1563214572
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0
 cp COPYING %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0/COPYING
@@ -185,6 +185,8 @@ cp COPYING %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0/C
 
 %files lib
 %defattr(-,root,root,-)
+%exclude /usr/lib64/libiptc.so.0.0.0
+%exclude /usr/lib64/libxtables.so.12.2.0
 %exclude /usr/lib64/xtables/libarpt_mangle.so
 %exclude /usr/lib64/xtables/libebt_802_3.so
 %exclude /usr/lib64/xtables/libebt_arp.so
@@ -315,9 +317,7 @@ cp COPYING %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0/C
 /usr/lib64/libip6tc.so.0
 /usr/lib64/libip6tc.so.0.1.0
 /usr/lib64/libiptc.so.0
-/usr/lib64/libiptc.so.0.0.0
 /usr/lib64/libxtables.so.12
-/usr/lib64/libxtables.so.12.2.0
 
 %files license
 %defattr(0644,root,root,0755)
