@@ -6,7 +6,7 @@
 #
 Name     : compat-iptables-soname0.1.0
 Version  : 1.8.2
-Release  : 1
+Release  : 2
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source1 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2.sig
@@ -24,6 +24,8 @@ BuildRequires : pkgconfig(libmnl)
 BuildRequires : pkgconfig(libnetfilter_conntrack)
 BuildRequires : pkgconfig(libnfnetlink)
 BuildRequires : pkgconfig(libnftnl)
+Patch1: cve-2012-2663.patch
+Patch2: cve-2019-11360.patch
 
 %description
 No detailed description available
@@ -87,26 +89,28 @@ man components for the compat-iptables-soname0.1.0 package.
 
 %prep
 %setup -q -n iptables-1.8.2
+%patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1563212906
+export SOURCE_DATE_EPOCH=1563213493
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure --disable-static --enable-devel --enable-ipv6
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1563212906
+export SOURCE_DATE_EPOCH=1563213493
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0
 cp COPYING %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0/COPYING
