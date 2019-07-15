@@ -1,0 +1,17 @@
+.*~
+*~
+*.info
+*.mod
+*.swp
+.repo-index
+*.log
+build.log.round*
+*.tar.*
+*.tgz
+!*.tar.*.*
+*.zip
+commitmsg
+list
+results/
+rpms/
+for-review.txt
