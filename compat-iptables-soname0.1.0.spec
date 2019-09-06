@@ -6,65 +6,32 @@
 #
 Name     : compat-iptables-soname0.1.0
 Version  : 1.8.2
-Release  : 4
+Release  : 5
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source1 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: compat-iptables-soname0.1.0-bin = %{version}-%{release}
-Requires: compat-iptables-soname0.1.0-data = %{version}-%{release}
 Requires: compat-iptables-soname0.1.0-lib = %{version}-%{release}
 Requires: compat-iptables-soname0.1.0-license = %{version}-%{release}
-Requires: compat-iptables-soname0.1.0-man = %{version}-%{release}
 BuildRequires : bison
 BuildRequires : flex
 BuildRequires : pkgconfig(libmnl)
 BuildRequires : pkgconfig(libnetfilter_conntrack)
 BuildRequires : pkgconfig(libnfnetlink)
 BuildRequires : pkgconfig(libnftnl)
+# Suppress generation of debuginfo
+%global debug_package %{nil}
 Patch1: cve-2012-2663.patch
 Patch2: cve-2019-11360.patch
 
 %description
 No detailed description available
 
-%package bin
-Summary: bin components for the compat-iptables-soname0.1.0 package.
-Group: Binaries
-Requires: compat-iptables-soname0.1.0-data = %{version}-%{release}
-Requires: compat-iptables-soname0.1.0-license = %{version}-%{release}
-
-%description bin
-bin components for the compat-iptables-soname0.1.0 package.
-
-
-%package data
-Summary: data components for the compat-iptables-soname0.1.0 package.
-Group: Data
-
-%description data
-data components for the compat-iptables-soname0.1.0 package.
-
-
-%package dev
-Summary: dev components for the compat-iptables-soname0.1.0 package.
-Group: Development
-Requires: compat-iptables-soname0.1.0-lib = %{version}-%{release}
-Requires: compat-iptables-soname0.1.0-bin = %{version}-%{release}
-Requires: compat-iptables-soname0.1.0-data = %{version}-%{release}
-Provides: compat-iptables-soname0.1.0-devel = %{version}-%{release}
-Requires: compat-iptables-soname0.1.0 = %{version}-%{release}
-
-%description dev
-dev components for the compat-iptables-soname0.1.0 package.
-
-
 %package lib
 Summary: lib components for the compat-iptables-soname0.1.0 package.
 Group: Libraries
-Requires: compat-iptables-soname0.1.0-data = %{version}-%{release}
 Requires: compat-iptables-soname0.1.0-license = %{version}-%{release}
 
 %description lib
@@ -79,14 +46,6 @@ Group: Default
 license components for the compat-iptables-soname0.1.0 package.
 
 
-%package man
-Summary: man components for the compat-iptables-soname0.1.0 package.
-Group: Default
-
-%description man
-man components for the compat-iptables-soname0.1.0 package.
-
-
 %prep
 %setup -q -n iptables-1.8.2
 %patch1 -p1
@@ -97,7 +56,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1563217365
+export SOURCE_DATE_EPOCH=1567812517
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -110,210 +69,215 @@ export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-stron
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1563217365
+export SOURCE_DATE_EPOCH=1567812517
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0
 cp COPYING %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0/COPYING
 %make_install
+## Remove excluded files
+rm -f %{buildroot}/usr/lib64/libiptc.so.0
+rm -f %{buildroot}/usr/lib64/libiptc.so.0.0.0
+rm -f %{buildroot}/usr/lib64/libxtables.so.12
+rm -f %{buildroot}/usr/lib64/libxtables.so.12.2.0
+rm -f %{buildroot}/usr/bin/arptables
+rm -f %{buildroot}/usr/bin/arptables-nft
+rm -f %{buildroot}/usr/bin/arptables-nft-restore
+rm -f %{buildroot}/usr/bin/arptables-nft-save
+rm -f %{buildroot}/usr/bin/arptables-restore
+rm -f %{buildroot}/usr/bin/arptables-save
+rm -f %{buildroot}/usr/bin/ebtables
+rm -f %{buildroot}/usr/bin/ebtables-nft
+rm -f %{buildroot}/usr/bin/ebtables-nft-restore
+rm -f %{buildroot}/usr/bin/ebtables-nft-save
+rm -f %{buildroot}/usr/bin/ebtables-restore
+rm -f %{buildroot}/usr/bin/ebtables-save
+rm -f %{buildroot}/usr/bin/ip6tables
+rm -f %{buildroot}/usr/bin/ip6tables-legacy
+rm -f %{buildroot}/usr/bin/ip6tables-legacy-restore
+rm -f %{buildroot}/usr/bin/ip6tables-legacy-save
+rm -f %{buildroot}/usr/bin/ip6tables-nft
+rm -f %{buildroot}/usr/bin/ip6tables-nft-restore
+rm -f %{buildroot}/usr/bin/ip6tables-nft-save
+rm -f %{buildroot}/usr/bin/ip6tables-restore
+rm -f %{buildroot}/usr/bin/ip6tables-restore-translate
+rm -f %{buildroot}/usr/bin/ip6tables-save
+rm -f %{buildroot}/usr/bin/ip6tables-translate
+rm -f %{buildroot}/usr/bin/iptables
+rm -f %{buildroot}/usr/bin/iptables-legacy
+rm -f %{buildroot}/usr/bin/iptables-legacy-restore
+rm -f %{buildroot}/usr/bin/iptables-legacy-save
+rm -f %{buildroot}/usr/bin/iptables-nft
+rm -f %{buildroot}/usr/bin/iptables-nft-restore
+rm -f %{buildroot}/usr/bin/iptables-nft-save
+rm -f %{buildroot}/usr/bin/iptables-restore
+rm -f %{buildroot}/usr/bin/iptables-restore-translate
+rm -f %{buildroot}/usr/bin/iptables-save
+rm -f %{buildroot}/usr/bin/iptables-translate
+rm -f %{buildroot}/usr/bin/iptables-xml
+rm -f %{buildroot}/usr/bin/nfnl_osf
+rm -f %{buildroot}/usr/bin/xtables-legacy-multi
+rm -f %{buildroot}/usr/bin/xtables-monitor
+rm -f %{buildroot}/usr/bin/xtables-nft-multi
+rm -f %{buildroot}/usr/include/libiptc/ipt_kernel_headers.h
+rm -f %{buildroot}/usr/include/libiptc/libip6tc.h
+rm -f %{buildroot}/usr/include/libiptc/libiptc.h
+rm -f %{buildroot}/usr/include/libiptc/libxtc.h
+rm -f %{buildroot}/usr/include/libiptc/xtcshared.h
+rm -f %{buildroot}/usr/include/xtables-version.h
+rm -f %{buildroot}/usr/include/xtables.h
+rm -f %{buildroot}/usr/lib64/libip4tc.so
+rm -f %{buildroot}/usr/lib64/libip6tc.so
+rm -f %{buildroot}/usr/lib64/libiptc.so
+rm -f %{buildroot}/usr/lib64/libxtables.so
+rm -f %{buildroot}/usr/lib64/pkgconfig/libip4tc.pc
+rm -f %{buildroot}/usr/lib64/pkgconfig/libip6tc.pc
+rm -f %{buildroot}/usr/lib64/pkgconfig/libiptc.pc
+rm -f %{buildroot}/usr/lib64/pkgconfig/xtables.pc
+rm -f %{buildroot}/usr/lib64/xtables/libarpt_mangle.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_802_3.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_arp.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_arpreply.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_dnat.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_ip.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_ip6.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_log.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_mark.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_mark_m.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_nflog.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_pkttype.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_redirect.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_snat.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_stp.so
+rm -f %{buildroot}/usr/lib64/xtables/libebt_vlan.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_DNAT.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_DNPT.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_HL.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_LOG.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_MASQUERADE.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_NETMAP.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_REDIRECT.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_REJECT.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_SNAT.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_SNPT.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_ah.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_dst.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_eui64.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_frag.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_hbh.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_hl.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_icmp6.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_ipv6header.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_mh.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_rt.so
+rm -f %{buildroot}/usr/lib64/xtables/libip6t_srh.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_CLUSTERIP.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_DNAT.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_ECN.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_LOG.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_MASQUERADE.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_NETMAP.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_REDIRECT.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_REJECT.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_SNAT.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_TTL.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_ULOG.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_ah.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_icmp.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_realm.so
+rm -f %{buildroot}/usr/lib64/xtables/libipt_ttl.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_AUDIT.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_CHECKSUM.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_CLASSIFY.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_CONNMARK.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_CONNSECMARK.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_CT.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_DSCP.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_HMARK.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_IDLETIMER.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_LED.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_MARK.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_NFLOG.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_NFQUEUE.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_NOTRACK.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_RATEEST.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_SECMARK.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_SET.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_SYNPROXY.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_TCPMSS.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_TCPOPTSTRIP.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_TEE.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_TOS.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_TPROXY.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_TRACE.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_addrtype.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_bpf.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_cgroup.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_cluster.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_comment.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_connbytes.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_connlabel.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_connlimit.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_connmark.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_conntrack.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_cpu.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_dccp.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_devgroup.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_dscp.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_ecn.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_esp.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_hashlimit.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_helper.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_ipcomp.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_iprange.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_ipvs.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_length.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_limit.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_mac.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_mark.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_multiport.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_nfacct.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_osf.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_owner.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_physdev.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_pkttype.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_policy.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_quota.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_rateest.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_recent.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_rpfilter.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_sctp.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_set.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_socket.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_standard.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_state.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_statistic.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_string.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_tcp.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_tcpmss.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_time.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_tos.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_u32.so
+rm -f %{buildroot}/usr/lib64/xtables/libxt_udp.so
+rm -f %{buildroot}/usr/share/man/man1/iptables-xml.1
+rm -f %{buildroot}/usr/share/man/man8/ip6tables-restore.8
+rm -f %{buildroot}/usr/share/man/man8/ip6tables-save.8
+rm -f %{buildroot}/usr/share/man/man8/ip6tables.8
+rm -f %{buildroot}/usr/share/man/man8/iptables-extensions.8
+rm -f %{buildroot}/usr/share/man/man8/iptables-restore.8
+rm -f %{buildroot}/usr/share/man/man8/iptables-save.8
+rm -f %{buildroot}/usr/share/man/man8/iptables.8
+rm -f %{buildroot}/usr/share/man/man8/nfnl_osf.8
+rm -f %{buildroot}/usr/share/man/man8/xtables-legacy.8
+rm -f %{buildroot}/usr/share/man/man8/xtables-monitor.8
+rm -f %{buildroot}/usr/share/man/man8/xtables-nft.8
+rm -f %{buildroot}/usr/share/man/man8/xtables-translate.8
+rm -f %{buildroot}/usr/share/xtables/pf.os
 
 %files
 %defattr(-,root,root,-)
 
-%files bin
-%defattr(-,root,root,-)
-%exclude /usr/bin/arptables
-%exclude /usr/bin/arptables-nft
-%exclude /usr/bin/arptables-nft-restore
-%exclude /usr/bin/arptables-nft-save
-%exclude /usr/bin/arptables-restore
-%exclude /usr/bin/arptables-save
-%exclude /usr/bin/ebtables
-%exclude /usr/bin/ebtables-nft
-%exclude /usr/bin/ebtables-nft-restore
-%exclude /usr/bin/ebtables-nft-save
-%exclude /usr/bin/ebtables-restore
-%exclude /usr/bin/ebtables-save
-%exclude /usr/bin/ip6tables
-%exclude /usr/bin/ip6tables-legacy
-%exclude /usr/bin/ip6tables-legacy-restore
-%exclude /usr/bin/ip6tables-legacy-save
-%exclude /usr/bin/ip6tables-nft
-%exclude /usr/bin/ip6tables-nft-restore
-%exclude /usr/bin/ip6tables-nft-save
-%exclude /usr/bin/ip6tables-restore
-%exclude /usr/bin/ip6tables-restore-translate
-%exclude /usr/bin/ip6tables-save
-%exclude /usr/bin/ip6tables-translate
-%exclude /usr/bin/iptables
-%exclude /usr/bin/iptables-legacy
-%exclude /usr/bin/iptables-legacy-restore
-%exclude /usr/bin/iptables-legacy-save
-%exclude /usr/bin/iptables-nft
-%exclude /usr/bin/iptables-nft-restore
-%exclude /usr/bin/iptables-nft-save
-%exclude /usr/bin/iptables-restore
-%exclude /usr/bin/iptables-restore-translate
-%exclude /usr/bin/iptables-save
-%exclude /usr/bin/iptables-translate
-%exclude /usr/bin/iptables-xml
-%exclude /usr/bin/nfnl_osf
-%exclude /usr/bin/xtables-legacy-multi
-%exclude /usr/bin/xtables-monitor
-%exclude /usr/bin/xtables-nft-multi
-
-%files data
-%defattr(-,root,root,-)
-%exclude /usr/share/xtables/pf.os
-
-%files dev
-%defattr(-,root,root,-)
-%exclude /usr/include/libiptc/ipt_kernel_headers.h
-%exclude /usr/include/libiptc/libip6tc.h
-%exclude /usr/include/libiptc/libiptc.h
-%exclude /usr/include/libiptc/libxtc.h
-%exclude /usr/include/libiptc/xtcshared.h
-%exclude /usr/include/xtables-version.h
-%exclude /usr/include/xtables.h
-%exclude /usr/lib64/libip4tc.so
-%exclude /usr/lib64/libip6tc.so
-%exclude /usr/lib64/libiptc.so
-%exclude /usr/lib64/libxtables.so
-%exclude /usr/lib64/pkgconfig/libip4tc.pc
-%exclude /usr/lib64/pkgconfig/libip6tc.pc
-%exclude /usr/lib64/pkgconfig/libiptc.pc
-%exclude /usr/lib64/pkgconfig/xtables.pc
-
 %files lib
 %defattr(-,root,root,-)
-%exclude /usr/lib64/libiptc.so.0
-%exclude /usr/lib64/libiptc.so.0.0.0
-%exclude /usr/lib64/libxtables.so.12
-%exclude /usr/lib64/libxtables.so.12.2.0
-%exclude /usr/lib64/xtables/libarpt_mangle.so
-%exclude /usr/lib64/xtables/libebt_802_3.so
-%exclude /usr/lib64/xtables/libebt_arp.so
-%exclude /usr/lib64/xtables/libebt_arpreply.so
-%exclude /usr/lib64/xtables/libebt_dnat.so
-%exclude /usr/lib64/xtables/libebt_ip.so
-%exclude /usr/lib64/xtables/libebt_ip6.so
-%exclude /usr/lib64/xtables/libebt_log.so
-%exclude /usr/lib64/xtables/libebt_mark.so
-%exclude /usr/lib64/xtables/libebt_mark_m.so
-%exclude /usr/lib64/xtables/libebt_nflog.so
-%exclude /usr/lib64/xtables/libebt_pkttype.so
-%exclude /usr/lib64/xtables/libebt_redirect.so
-%exclude /usr/lib64/xtables/libebt_snat.so
-%exclude /usr/lib64/xtables/libebt_stp.so
-%exclude /usr/lib64/xtables/libebt_vlan.so
-%exclude /usr/lib64/xtables/libip6t_DNAT.so
-%exclude /usr/lib64/xtables/libip6t_DNPT.so
-%exclude /usr/lib64/xtables/libip6t_HL.so
-%exclude /usr/lib64/xtables/libip6t_LOG.so
-%exclude /usr/lib64/xtables/libip6t_MASQUERADE.so
-%exclude /usr/lib64/xtables/libip6t_NETMAP.so
-%exclude /usr/lib64/xtables/libip6t_REDIRECT.so
-%exclude /usr/lib64/xtables/libip6t_REJECT.so
-%exclude /usr/lib64/xtables/libip6t_SNAT.so
-%exclude /usr/lib64/xtables/libip6t_SNPT.so
-%exclude /usr/lib64/xtables/libip6t_ah.so
-%exclude /usr/lib64/xtables/libip6t_dst.so
-%exclude /usr/lib64/xtables/libip6t_eui64.so
-%exclude /usr/lib64/xtables/libip6t_frag.so
-%exclude /usr/lib64/xtables/libip6t_hbh.so
-%exclude /usr/lib64/xtables/libip6t_hl.so
-%exclude /usr/lib64/xtables/libip6t_icmp6.so
-%exclude /usr/lib64/xtables/libip6t_ipv6header.so
-%exclude /usr/lib64/xtables/libip6t_mh.so
-%exclude /usr/lib64/xtables/libip6t_rt.so
-%exclude /usr/lib64/xtables/libip6t_srh.so
-%exclude /usr/lib64/xtables/libipt_CLUSTERIP.so
-%exclude /usr/lib64/xtables/libipt_DNAT.so
-%exclude /usr/lib64/xtables/libipt_ECN.so
-%exclude /usr/lib64/xtables/libipt_LOG.so
-%exclude /usr/lib64/xtables/libipt_MASQUERADE.so
-%exclude /usr/lib64/xtables/libipt_NETMAP.so
-%exclude /usr/lib64/xtables/libipt_REDIRECT.so
-%exclude /usr/lib64/xtables/libipt_REJECT.so
-%exclude /usr/lib64/xtables/libipt_SNAT.so
-%exclude /usr/lib64/xtables/libipt_TTL.so
-%exclude /usr/lib64/xtables/libipt_ULOG.so
-%exclude /usr/lib64/xtables/libipt_ah.so
-%exclude /usr/lib64/xtables/libipt_icmp.so
-%exclude /usr/lib64/xtables/libipt_realm.so
-%exclude /usr/lib64/xtables/libipt_ttl.so
-%exclude /usr/lib64/xtables/libxt_AUDIT.so
-%exclude /usr/lib64/xtables/libxt_CHECKSUM.so
-%exclude /usr/lib64/xtables/libxt_CLASSIFY.so
-%exclude /usr/lib64/xtables/libxt_CONNMARK.so
-%exclude /usr/lib64/xtables/libxt_CONNSECMARK.so
-%exclude /usr/lib64/xtables/libxt_CT.so
-%exclude /usr/lib64/xtables/libxt_DSCP.so
-%exclude /usr/lib64/xtables/libxt_HMARK.so
-%exclude /usr/lib64/xtables/libxt_IDLETIMER.so
-%exclude /usr/lib64/xtables/libxt_LED.so
-%exclude /usr/lib64/xtables/libxt_MARK.so
-%exclude /usr/lib64/xtables/libxt_NFLOG.so
-%exclude /usr/lib64/xtables/libxt_NFQUEUE.so
-%exclude /usr/lib64/xtables/libxt_NOTRACK.so
-%exclude /usr/lib64/xtables/libxt_RATEEST.so
-%exclude /usr/lib64/xtables/libxt_SECMARK.so
-%exclude /usr/lib64/xtables/libxt_SET.so
-%exclude /usr/lib64/xtables/libxt_SYNPROXY.so
-%exclude /usr/lib64/xtables/libxt_TCPMSS.so
-%exclude /usr/lib64/xtables/libxt_TCPOPTSTRIP.so
-%exclude /usr/lib64/xtables/libxt_TEE.so
-%exclude /usr/lib64/xtables/libxt_TOS.so
-%exclude /usr/lib64/xtables/libxt_TPROXY.so
-%exclude /usr/lib64/xtables/libxt_TRACE.so
-%exclude /usr/lib64/xtables/libxt_addrtype.so
-%exclude /usr/lib64/xtables/libxt_bpf.so
-%exclude /usr/lib64/xtables/libxt_cgroup.so
-%exclude /usr/lib64/xtables/libxt_cluster.so
-%exclude /usr/lib64/xtables/libxt_comment.so
-%exclude /usr/lib64/xtables/libxt_connbytes.so
-%exclude /usr/lib64/xtables/libxt_connlabel.so
-%exclude /usr/lib64/xtables/libxt_connlimit.so
-%exclude /usr/lib64/xtables/libxt_connmark.so
-%exclude /usr/lib64/xtables/libxt_conntrack.so
-%exclude /usr/lib64/xtables/libxt_cpu.so
-%exclude /usr/lib64/xtables/libxt_dccp.so
-%exclude /usr/lib64/xtables/libxt_devgroup.so
-%exclude /usr/lib64/xtables/libxt_dscp.so
-%exclude /usr/lib64/xtables/libxt_ecn.so
-%exclude /usr/lib64/xtables/libxt_esp.so
-%exclude /usr/lib64/xtables/libxt_hashlimit.so
-%exclude /usr/lib64/xtables/libxt_helper.so
-%exclude /usr/lib64/xtables/libxt_ipcomp.so
-%exclude /usr/lib64/xtables/libxt_iprange.so
-%exclude /usr/lib64/xtables/libxt_ipvs.so
-%exclude /usr/lib64/xtables/libxt_length.so
-%exclude /usr/lib64/xtables/libxt_limit.so
-%exclude /usr/lib64/xtables/libxt_mac.so
-%exclude /usr/lib64/xtables/libxt_mark.so
-%exclude /usr/lib64/xtables/libxt_multiport.so
-%exclude /usr/lib64/xtables/libxt_nfacct.so
-%exclude /usr/lib64/xtables/libxt_osf.so
-%exclude /usr/lib64/xtables/libxt_owner.so
-%exclude /usr/lib64/xtables/libxt_physdev.so
-%exclude /usr/lib64/xtables/libxt_pkttype.so
-%exclude /usr/lib64/xtables/libxt_policy.so
-%exclude /usr/lib64/xtables/libxt_quota.so
-%exclude /usr/lib64/xtables/libxt_rateest.so
-%exclude /usr/lib64/xtables/libxt_recent.so
-%exclude /usr/lib64/xtables/libxt_rpfilter.so
-%exclude /usr/lib64/xtables/libxt_sctp.so
-%exclude /usr/lib64/xtables/libxt_set.so
-%exclude /usr/lib64/xtables/libxt_socket.so
-%exclude /usr/lib64/xtables/libxt_standard.so
-%exclude /usr/lib64/xtables/libxt_state.so
-%exclude /usr/lib64/xtables/libxt_statistic.so
-%exclude /usr/lib64/xtables/libxt_string.so
-%exclude /usr/lib64/xtables/libxt_tcp.so
-%exclude /usr/lib64/xtables/libxt_tcpmss.so
-%exclude /usr/lib64/xtables/libxt_time.so
-%exclude /usr/lib64/xtables/libxt_tos.so
-%exclude /usr/lib64/xtables/libxt_u32.so
-%exclude /usr/lib64/xtables/libxt_udp.so
 /usr/lib64/libip4tc.so.0
 /usr/lib64/libip4tc.so.0.1.0
 /usr/lib64/libip6tc.so.0
@@ -321,20 +285,4 @@ cp COPYING %{buildroot}/usr/share/package-licenses/compat-iptables-soname0.1.0/C
 
 %files license
 %defattr(0644,root,root,0755)
-%exclude /usr/share/package-licenses/compat-iptables-soname0.1.0/COPYING
-
-%files man
-%defattr(0644,root,root,0755)
-%exclude /usr/share/man/man1/iptables-xml.1
-%exclude /usr/share/man/man8/ip6tables-restore.8
-%exclude /usr/share/man/man8/ip6tables-save.8
-%exclude /usr/share/man/man8/ip6tables.8
-%exclude /usr/share/man/man8/iptables-extensions.8
-%exclude /usr/share/man/man8/iptables-restore.8
-%exclude /usr/share/man/man8/iptables-save.8
-%exclude /usr/share/man/man8/iptables.8
-%exclude /usr/share/man/man8/nfnl_osf.8
-%exclude /usr/share/man/man8/xtables-legacy.8
-%exclude /usr/share/man/man8/xtables-monitor.8
-%exclude /usr/share/man/man8/xtables-nft.8
-%exclude /usr/share/man/man8/xtables-translate.8
+/usr/share/package-licenses/compat-iptables-soname0.1.0/COPYING
