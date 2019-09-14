@@ -6,7 +6,7 @@
 #
 Name     : compat-iptables-soname0.1.0
 Version  : 1.8.2
-Release  : 5
+Release  : 6
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source1 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2.sig
